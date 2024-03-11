@@ -1,0 +1,25 @@
+#http://ec2-18-221-163-96.us-east-2.compute.amazonaws.com:8080/
+- name: Build & Deploy Docker container
+  hosts: dockerservers
+  gather_facts: false
+  remote_user: root
+  tasks:
+    - name: copy the files to remote server
+      become: true
+      copy:
+        src: /var/lib/jenkins/workspace/ansible-jenkins-pipeline
+        dest: ~/project/
+        remote_src: true
+    - name: Building Docker Image
+      docker_image:
+        name: carvilla:latest
+        build:
+          path:~/project
+        state: present
+    - name: Creating the Container
+      docker_container:
+       name: carvilla-container
+       image: carvilla:latest
+       ports:
+        - "80:80"
+       state: started
