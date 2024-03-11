@@ -5,11 +5,12 @@
   remote_user: root
   tasks:
     - name: copy the files to remote server
-      become: true
-      copy:
-        src: /var/lib/jenkins/workspace/ansible-jenkins-pipeline
-        dest: ~/project/
-        remote_src: true
+      shell: scp -r /var/lib/jenkins/workspace/ansible-jenkins-pipeline root@18.217.229.119:~/project/
+      #become: true
+      #copy:
+      #  src: /var/lib/jenkins/workspace/ansible-jenkins-pipeline
+      #  dest: ~/project/
+      #  remote_src: true
     - name: Building Docker Image
       docker_image:
         name: carvilla:latest
